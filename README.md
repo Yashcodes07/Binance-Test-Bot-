@@ -65,8 +65,6 @@ BINANCE_API_SECRET=your_testnet_api_secret_here
 BINANCE_BASE_URL=https://testnet.binancefuture.com
 ```
 
-> ⚠️ **Never commit `.env` to version control.**
-
 ---
 
 ## Running the Bot
@@ -171,7 +169,7 @@ place options:
 
 ## Logging
 
-All activity is written to **`logs/trading_bot.log`** (rotating, max 5 MB,
+All activity is written to **`logs/sample_market.log`** (rotating, max 5 MB,
 3 backups) with `DEBUG` granularity. The console shows `INFO` and above by
 default; pass `--log-level DEBUG` to see full request/response details.
 
