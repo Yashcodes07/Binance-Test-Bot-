@@ -3,6 +3,8 @@
 A clean, production-style Python CLI application that places orders on
 **Binance USDT-M Futures Testnet** with proper input validation, structured
 logging, and robust error handling.
+This project uses Binance Futures Testnet / Demo Trading only.
+No real funds are used.
 
 ---
 
