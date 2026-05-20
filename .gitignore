@@ -1,0 +1,22 @@
+# Credentials – never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Logs
+logs/*.log
+logs/*.log.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
