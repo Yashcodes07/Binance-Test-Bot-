@@ -12,9 +12,7 @@ env/
 dist/
 build/
 
-# Logs
-logs/*.log
-logs/*.log.*
+
 
 # IDE
 .vscode/

@@ -1,0 +1,36 @@
+2026-05-20 19:59:58 | INFO     | trading_bot | Logging initialised — file: logs/trading_bot.log
+2026-05-20 19:59:58 | INFO     | trading_bot.client | BinanceFuturesClient initialised (base_url=https://testnet.binancefuture.com)
+
+------------------------------------------------------------
+MARKET ORDER EXECUTION
+------------------------------------------------------------
+
+2026-05-20 19:59:58 | DEBUG    | trading_bot.validators | Symbol validated: BTCUSDT
+2026-05-20 19:59:58 | DEBUG    | trading_bot.validators | Side validated: BUY
+2026-05-20 19:59:58 | DEBUG    | trading_bot.validators | Order type validated: MARKET
+2026-05-20 19:59:58 | DEBUG    | trading_bot.validators | Quantity validated: 0.001
+
+2026-05-20 19:59:58 | INFO     | trading_bot.orders | Order request | symbol=BTCUSDT side=BUY type=MARKET qty=0.001 price=N/A stop=N/A
+
+2026-05-20 19:59:58 | INFO     | trading_bot.client | Placing BUY MARKET order | symbol=BTCUSDT qty=0.001
+
+2026-05-20 19:59:58 | DEBUG    | trading_bot.client | → POST /fapi/v1/order
+
+2026-05-20 19:59:58 | DEBUG    | trading_bot.client | ← HTTP 200 response={
+    'orderId': 13168220262,
+    'symbol': 'BTCUSDT',
+    'status': 'NEW',
+    'clientOrderId': 'D8SWiO1DomMH8g31Y6zkHu',
+    'type': 'MARKET',
+    'side': 'BUY',
+    'origQty': '0.0010',
+    'executedQty': '0.0000'
+}
+
+2026-05-20 19:59:58 | INFO     | trading_bot.client | Order placed | orderId=13168220262 status=NEW
+
+2026-05-20 19:59:58 | INFO     | trading_bot.orders | Order result | orderId=13168220262 status=NEW execQty=0.0000
+
+------------------------------------------------------------
+ORDER SUBMITTED SUCCESSFULLY
+------------------------------------------------------------
