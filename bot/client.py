@@ -1,14 +1,3 @@
-"""
-Binance Futures REST API client wrapper.
-
-Handles:
-  - HMAC-SHA256 request signing
-  - Server-time synchronisation
-  - Structured request/response logging
-  - Retry logic on transient network errors
-  - Uniform BinanceAPIError for all non-2xx responses
-"""
-
 from __future__ import annotations
 
 import hashlib
@@ -56,15 +45,6 @@ def _build_session() -> requests.Session:
 
 
 class BinanceFuturesClient:
-    """
-    Thin, authenticated wrapper around the Binance USDT-M Futures REST API.
-
-    Usage::
-
-        client = BinanceFuturesClient(api_key="...", api_secret="...")
-        resp = client.place_order(symbol="BTCUSDT", side="BUY",
-                                   order_type="MARKET", quantity="0.01")
-    """
 
     def __init__(
         self,
@@ -83,10 +63,6 @@ class BinanceFuturesClient:
         self._session.headers.update({"X-MBX-APIKEY": self._api_key})
         logger.info("BinanceFuturesClient initialised (base_url=%s)", self._base_url)
 
-    # ------------------------------------------------------------------
-    # Private helpers
-    # ------------------------------------------------------------------
-
     def _timestamp(self) -> int:
         """Return current UTC timestamp in milliseconds."""
         return int(time.time() * 1000)
@@ -103,22 +79,7 @@ class BinanceFuturesClient:
         params: Optional[Dict[str, Any]] = None,
         signed: bool = False,
     ) -> Dict[str, Any]:
-        """
-        Execute an HTTP request against the Binance Futures REST API.
 
-        Args:
-            method:   HTTP verb ("GET" or "POST").
-            endpoint: API path, e.g. "/fapi/v1/order".
-            params:   Query / body parameters.
-            signed:   Whether to attach timestamp + signature.
-
-        Returns:
-            Parsed JSON response as a dict.
-
-        Raises:
-            BinanceAPIError: On non-2xx API responses.
-            requests.RequestException: On network-level failures.
-        """
         params = params or {}
         url = f"{self._base_url}{endpoint}"
 
@@ -161,10 +122,6 @@ class BinanceFuturesClient:
         logger.debug("← HTTP %s  response=%s", response.status_code, data)
         return data
 
-    # ------------------------------------------------------------------
-    # Public API
-    # ------------------------------------------------------------------
-
     def get_server_time(self) -> int:
         """Fetch Binance server time (ms). Useful to check connectivity."""
         data = self._request("GET", "/fapi/v1/time")
@@ -205,22 +162,7 @@ class BinanceFuturesClient:
         time_in_force: str = "GTC",
         reduce_only: bool = False,
     ) -> Dict[str, Any]:
-        """
-        Place a new order on Binance Futures Testnet.
 
-        Args:
-            symbol:        Trading pair, e.g. "BTCUSDT".
-            side:          "BUY" or "SELL".
-            order_type:    "MARKET", "LIMIT", or "STOP_MARKET".
-            quantity:      Order size as a string to preserve precision.
-            price:         Limit price (required for LIMIT orders).
-            stop_price:    Stop trigger price (required for STOP_MARKET).
-            time_in_force: "GTC" | "IOC" | "FOK" (ignored for MARKET).
-            reduce_only:   If True, order can only reduce position.
-
-        Returns:
-            Raw API response dict.
-        """
         params: Dict[str, Any] = {
             "symbol":   symbol,
             "side":     side,
@@ -258,7 +200,7 @@ class BinanceFuturesClient:
         return response
 
     def cancel_order(self, symbol: str, order_id: int) -> Dict[str, Any]:
-        """Cancel an existing open order."""
+
         logger.info("Cancelling order %s on %s", order_id, symbol)
         return self._request(
             "DELETE",

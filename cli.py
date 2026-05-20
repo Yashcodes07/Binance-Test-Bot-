@@ -1,29 +1,4 @@
-#!/usr/bin/env python3
-"""
-CLI entry point for the Binance Futures Trading Bot.
-
-Usage examples:
-  # Market buy
-  python cli.py place --symbol BTCUSDT --side BUY --type MARKET --quantity 0.01
-
-  # Limit sell
-  python cli.py place --symbol ETHUSDT --side SELL --type LIMIT --quantity 0.1 --price 3500
-
-  # Stop-Market sell (bonus order type)
-  python cli.py place --symbol BTCUSDT --side SELL --type STOP_MARKET --quantity 0.01 --stop-price 60000
-
-  # Check open orders
-  python cli.py orders --symbol BTCUSDT
-
-  # Check account balances
-  python cli.py account
-
-  # Ping the server
-  python cli.py ping
-"""
-
 from __future__ import annotations
-
 import os
 import sys
 import json
@@ -39,7 +14,6 @@ from bot.orders import OrderManager
 # Load .env before anything else
 load_dotenv()
 
-# ── Colour helpers (degrades gracefully on Windows) ──────────────────────────
 def _c(code: str, text: str) -> str:
     if sys.stdout.isatty():
         return f"\033[{code}m{text}\033[0m"
@@ -51,8 +25,6 @@ YELLOW = lambda t: _c("33", t)
 CYAN   = lambda t: _c("36", t)
 BOLD   = lambda t: _c("1",  t)
 
-
-# ── Arg parsing ──────────────────────────────────────────────────────────────
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -80,7 +52,6 @@ Examples:
     sub = parser.add_subparsers(dest="command", metavar="COMMAND")
     sub.required = True
 
-    # ---- place -------------------------------------------------------
     p_place = sub.add_parser("place", help="Place a new order")
     p_place.add_argument("--symbol",     required=True,  help="e.g. BTCUSDT")
     p_place.add_argument("--side",       required=True,  choices=["BUY", "SELL"])
@@ -97,25 +68,19 @@ Examples:
     p_place.add_argument("--reduce-only", action="store_true",
                          help="Reduce-only flag")
 
-    # ---- orders ------------------------------------------------------
     p_orders = sub.add_parser("orders", help="List open orders")
     p_orders.add_argument("--symbol", default=None, help="Filter by symbol")
 
-    # ---- cancel ------------------------------------------------------
     p_cancel = sub.add_parser("cancel", help="Cancel an open order")
     p_cancel.add_argument("--symbol",   required=True)
     p_cancel.add_argument("--order-id", required=True, type=int, dest="order_id")
 
-    # ---- account -----------------------------------------------------
     sub.add_parser("account", help="Show account balances")
 
-    # ---- ping --------------------------------------------------------
     sub.add_parser("ping", help="Test connectivity to Binance server")
 
     return parser
 
-
-# ── Command handlers ─────────────────────────────────────────────────────────
 
 def cmd_place(client: BinanceFuturesClient, args: argparse.Namespace) -> int:
     manager = OrderManager(client)
@@ -232,11 +197,9 @@ def main() -> None:
     parser = build_parser()
     args   = parser.parse_args()
 
-    # Setup logging first
     setup_logging(args.log_level)
     logger = get_logger("cli")
-
-    # Resolve credentials: CLI flag > env var
+ 
     api_key    = args.api_key    or os.getenv("BINANCE_API_KEY",    "")
     api_secret = args.api_secret or os.getenv("BINANCE_API_SECRET", "")
     base_url   = args.base_url   or os.getenv("BINANCE_BASE_URL",   "https://testnet.binancefuture.com")

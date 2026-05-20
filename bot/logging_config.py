@@ -1,7 +1,4 @@
-"""
-Logging configuration for the Binance Futures trading bot.
-Sets up both file and console handlers with structured formatting.
-"""
+
 
 import logging
 import os
@@ -16,15 +13,7 @@ DATE_FORMAT   = "%Y-%m-%d %H:%M:%S"
 
 
 def setup_logging(level: str = "INFO") -> logging.Logger:
-    """
-    Configure and return the root logger for the trading bot.
 
-    Args:
-        level: Logging level string (DEBUG, INFO, WARNING, ERROR).
-
-    Returns:
-        Configured root logger instance.
-    """
     os.makedirs(LOG_DIR, exist_ok=True)
     numeric_level = getattr(logging, level.upper(), logging.INFO)
 
@@ -34,14 +23,13 @@ def setup_logging(level: str = "INFO") -> logging.Logger:
     if logger.handlers:
         return logger
 
-    # Rotating file handler – always DEBUG so nothing is lost
     file_handler = RotatingFileHandler(
         LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=3, encoding="utf-8"
     )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(logging.Formatter(FILE_FORMAT, datefmt=DATE_FORMAT))
 
-    # Console handler – level controlled by caller
+
     console_handler = logging.StreamHandler()
     console_handler.setLevel(numeric_level)
     console_handler.setFormatter(logging.Formatter(CONSOLE_FORMAT, datefmt=DATE_FORMAT))

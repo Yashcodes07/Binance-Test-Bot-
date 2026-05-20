@@ -1,13 +1,3 @@
-"""
-Order placement logic layer.
-
-Sits between the CLI and the raw API client.
-Responsible for:
-  - Calling validators before touching the API
-  - Formatting and returning a clean OrderResult
-  - Logging the full order lifecycle
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -119,12 +109,7 @@ class OrderManager:
         time_in_force: str = "GTC",
         reduce_only: bool = False,
     ) -> OrderResult:
-        """
-        Validate inputs, place an order, and return a structured OrderResult.
 
-        All parameters accept raw user strings; validation normalises them.
-        """
-        # ---- Validation -----------------------------------------------
         try:
             v_symbol      = validate_symbol(symbol)
             v_side        = validate_side(side)
@@ -141,8 +126,6 @@ class OrderManager:
             v_symbol, v_side, v_order_type, v_quantity,
             v_price or "N/A", v_stop_price or "N/A",
         )
-
-        # ---- Placement ------------------------------------------------
         try:
             response = self._client.place_order(
                 symbol        = v_symbol,
